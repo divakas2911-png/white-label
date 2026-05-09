@@ -7,12 +7,6 @@ const quickLinks = [
   { label: 'Partner With Us', href: 'https://calendar.app.google/3WcusaLKF1q7T89e9' },
 ]
 
-const companyLinks = [
-  { label: 'About Us', href: '#why-us' },
-  { label: 'How It Works', href: '#how-it-works' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Partner With Us', href: 'https://calendar.app.google/3WcusaLKF1q7T89e9' },
-]
 
 export default function Footer() {
   return (
@@ -37,22 +31,14 @@ export default function Footer() {
             </div>
           </div>
           <div className="footer-col">
-            <h4 className="footer-col-title">Services</h4>
+            <h4 className="footer-col-title">Quick Links</h4>
             <ul>
               {quickLinks.map(l => (
                 <li key={l.label}><a href={l.href}>{l.label}</a></li>
               ))}
             </ul>
           </div>
-          <div className="footer-col">
-            <h4 className="footer-col-title">Company</h4>
-            <ul>
-              {companyLinks.map(l => (
-                <li key={l.label}><a href={l.href}>{l.label}</a></li>
-              ))}
-            </ul>
-          </div>
-          <div className="footer-col">
+<div className="footer-col">
             <h4 className="footer-col-title">Contact</h4>
             <ul>
               <li><a href="mailto:vikas@saasylinks.com">vikas@saasylinks.com</a></li>
