@@ -1,0 +1,81 @@
+.how-it-works {
+  padding: 100px 32px;
+  background: var(--gray-50);
+  border-top: 1px solid var(--gray-100);
+}
+
+.hiw-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.hiw-steps {
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.hiw-step {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.hiw-step-num-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.hiw-step-num {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 18px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--primary);
+  box-shadow: 4px 4px 0 0 var(--primary);
+  flex-shrink: 0;
+}
+
+.hiw-connector {
+  width: 2px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--accent), var(--gray-200));
+  margin: 4px 0;
+}
+
+.hiw-step-content {
+  padding: 8px 0 40px;
+}
+
+.hiw-step:last-child .hiw-step-content {
+  padding-bottom: 0;
+}
+
+.hiw-step-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.hiw-step-desc {
+  font-size: 15px;
+  color: var(--gray-600);
+  line-height: 1.7;
+}
+
+@media (max-width: 640px) {
+  .how-it-works { padding: 64px 20px; }
+  .hiw-step { gap: 20px; }
+  .hiw-step-num { width: 44px; height: 44px; font-size: 15px; }
+}
