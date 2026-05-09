@@ -9,6 +9,7 @@ const query = `*[_type == "post"] | order(publishedAt desc) {
   publishedAt,
   excerpt,
   "author": author->name,
+  "authorImage": author->image.asset->url,
   "categories": categories[]->title,
   "mainImage": mainImage.asset->url
 }`
@@ -21,9 +22,10 @@ function PostCard({ post }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        background: '#1e1b18',
-        border: '1px solid #292524',
-        boxShadow: hovered ? '4px 4px 0 0 #f59e0b' : '4px 4px 0 0 #292524',
+        background: '#fff',
+        border: '2px solid #1c1917',
+        borderRadius: '6px',
+        boxShadow: hovered ? '6px 6px 0 0 #1c1917' : '4px 4px 0 0 #1c1917',
         transform: hovered ? 'translate(-2px, -2px)' : 'translate(0, 0)',
         transition: 'all 0.15s ease',
         display: 'flex',
@@ -32,7 +34,7 @@ function PostCard({ post }) {
       }}
     >
       {post.mainImage ? (
-        <div style={{ overflow: 'hidden', height: '200px' }}>
+        <div style={{ overflow: 'hidden', height: '210px', borderBottom: '2px solid #1c1917' }}>
           <img
             src={post.mainImage}
             alt={post.title}
@@ -40,36 +42,45 @@ function PostCard({ post }) {
           />
         </div>
       ) : (
-        <div style={{ height: '200px', background: '#292524', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ width: '40px', height: '40px', border: '2px solid #f59e0b', transform: 'rotate(45deg)' }} />
+        <div style={{ height: '210px', background: '#f5f5f4', borderBottom: '2px solid #1c1917', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '48px', height: '48px', background: '#f59e0b', border: '2px solid #1c1917', transform: 'rotate(45deg)' }} />
         </div>
       )}
 
       <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
         <div style={{ display: 'flex', gap: '6px', marginBottom: '12px', flexWrap: 'wrap' }}>
           {post.categories?.map((cat) => (
-            <span key={cat} style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', fontSize: '11px', fontWeight: 600, padding: '2px 10px', letterSpacing: '0.05em', textTransform: 'uppercase', border: '1px solid rgba(245,158,11,0.2)' }}>
+            <span key={cat} style={{ background: '#fef3c7', color: '#92400e', fontSize: '11px', fontWeight: 700, padding: '3px 10px', letterSpacing: '0.06em', textTransform: 'uppercase', border: '1px solid #f59e0b', borderRadius: '4px' }}>
               {cat}
             </span>
           ))}
         </div>
 
         <Link to={`/blog/${post.slug.current}`} style={{ textDecoration: 'none', flex: 1 }}>
-          <h2 style={{ color: hovered ? '#f59e0b' : '#fff', fontSize: '1.2rem', fontWeight: 700, marginBottom: '10px', lineHeight: 1.4, transition: 'color 0.15s ease' }}>
+          <h2 style={{ color: '#1c1917', fontSize: '1.15rem', fontWeight: 700, marginBottom: '10px', lineHeight: 1.4, transition: 'color 0.15s ease', ...(hovered && { color: '#d97706' }) }}>
             {post.title}
           </h2>
         </Link>
 
         {post.excerpt && (
-          <p style={{ color: '#a8a29e', lineHeight: 1.7, fontSize: '0.9rem', marginBottom: '16px' }}>{post.excerpt}</p>
+          <p style={{ color: '#57534e', lineHeight: 1.7, fontSize: '0.9rem', marginBottom: '16px' }}>{post.excerpt}</p>
         )}
 
-        <div style={{ display: 'flex', gap: '12px', color: '#57534e', fontSize: '12px', borderTop: '1px solid #292524', paddingTop: '14px', marginTop: 'auto' }}>
-          {post.author && <span style={{ color: '#a8a29e', fontWeight: 500 }}>{post.author}</span>}
-          {post.author && post.publishedAt && <span>·</span>}
-          {post.publishedAt && (
-            <span>{new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-          )}
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', fontSize: '12px', borderTop: '1px solid #e7e5e4', paddingTop: '14px', marginTop: 'auto' }}>
+          {post.authorImage ? (
+            <img src={post.authorImage} alt={post.author} style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #1c1917', flexShrink: 0 }} />
+          ) : post.author ? (
+            <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#f59e0b', border: '2px solid #1c1917', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '11px', color: '#1c1917', flexShrink: 0 }}>
+              {post.author.charAt(0)}
+            </div>
+          ) : null}
+          <div style={{ display: 'flex', gap: '6px', alignItems: 'center', color: '#a8a29e' }}>
+            {post.author && <span style={{ color: '#57534e', fontWeight: 600 }}>{post.author}</span>}
+            {post.author && post.publishedAt && <span>·</span>}
+            {post.publishedAt && (
+              <span>{new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+            )}
+          </div>
         </div>
       </div>
     </article>
@@ -88,43 +99,37 @@ export default function BlogList() {
   }, [])
 
   return (
-    <main style={{ minHeight: '80vh', background: '#1c1917', paddingBottom: '80px' }}>
-      {/* Hero Header */}
-      <div style={{ background: '#141210', borderBottom: '1px solid #292524', padding: '72px 24px 56px' }}>
+    <main style={{ minHeight: '80vh', background: '#fafaf9' }}>
+      {/* Header */}
+      <div style={{ background: '#fff', padding: 'calc(80px + 64px) 24px 56px' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{ display: 'inline-block', background: '#f59e0b', color: '#1c1917', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '4px 12px', marginBottom: '20px' }}>
-            Our Blog
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#f59e0b', border: '2px solid #1c1917', borderRadius: '100px', padding: '5px 16px', marginBottom: '24px', boxShadow: '3px 3px 0 0 #1c1917' }}>
+            <span style={{ width: '7px', height: '7px', background: '#1c1917', borderRadius: '50%' }} />
+            <span style={{ fontSize: '12px', fontWeight: 700, color: '#1c1917', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Our Blog</span>
           </div>
-          <h1 style={{ color: '#fff', fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', fontWeight: 800, lineHeight: 1.1, marginBottom: '16px', letterSpacing: '-0.02em' }}>
-            Insights on Link Building<br />
-            <span style={{ color: '#f59e0b' }}>&amp; SEO Strategy</span>
+          <h1 style={{ fontSize: 'clamp(2rem, 4.5vw, 3.2rem)', fontWeight: 800, color: '#1c1917', lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: '16px' }}>
+            Insights on{' '}
+            <span style={{ color: '#f59e0b', backgroundImage: 'linear-gradient(transparent 65%, rgba(245,158,11,0.22) 65%)', WebkitBoxDecorationBreak: 'clone' }}>Link Building Outsourcing</span>
           </h1>
-          <p style={{ color: '#a8a29e', fontSize: '1.1rem', maxWidth: '520px' }}>
-            Actionable guides and expert tips for SEO agencies scaling their link building.
+          <p style={{ color: '#57534e', fontSize: '1.1rem', maxWidth: '500px', lineHeight: 1.7 }}>
+            The go-to resource for agencies who outsource link building.
           </p>
         </div>
       </div>
 
-      {/* Posts Grid */}
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '56px 24px 0' }}>
+      {/* Posts */}
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '56px 24px 80px' }}>
         {loading && (
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', color: '#57534e' }}>
-            <div style={{ width: '6px', height: '6px', background: '#f59e0b', borderRadius: '50%' }} />
-            Loading posts...
-          </div>
+          <p style={{ color: '#a8a29e', fontSize: '15px' }}>Loading posts...</p>
         )}
 
         {!loading && posts.length === 0 && (
-          <div style={{ border: '1px solid #292524', padding: '48px', textAlign: 'center' }}>
-            <p style={{ color: '#57534e', fontSize: '1rem' }}>No posts yet. Add your first post in the Sanity Studio.</p>
+          <div style={{ border: '2px dashed #d6d3d1', borderRadius: '6px', padding: '56px', textAlign: 'center' }}>
+            <p style={{ color: '#a8a29e' }}>No posts yet. Add your first post in the Sanity Studio.</p>
           </div>
         )}
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-          gap: '28px',
-        }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '28px' }}>
           {posts.map((post) => (
             <PostCard key={post._id} post={post} />
           ))}
